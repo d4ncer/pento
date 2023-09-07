@@ -13,8 +13,21 @@ defmodule PentoWeb.WrongLive do
     )
   end
 
-  def mount(_params, _session, socket) do
-    {:ok, base_state(socket)}
+  def base_state(socket, session) do
+    winning_number = Enum.random(1..10)
+
+    assign(socket,
+      winning_number: winning_number,
+      score: 0,
+      win_p: false,
+      message: "Make a guess:",
+      time: time(),
+      session_id: session["live_socket_id"]
+    )
+  end
+
+  def mount(_params, session, socket) do
+    {:ok, base_state(socket, session)}
   end
 
   def time() do
@@ -35,6 +48,10 @@ defmodule PentoWeb.WrongLive do
     <%= if @win_p do %>
       <button phx-click="reset-state">Reset</button>
     <% end %>
+    <pre>
+    <%= @current_user.email %>
+    <%= @session_id %>
+    </pre>
     """
   end
 
