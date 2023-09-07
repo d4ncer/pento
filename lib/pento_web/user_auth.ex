@@ -162,6 +162,7 @@ defmodule PentoWeb.UserAuth do
 
   def on_mount(:ensure_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
+    socket = mount_session_id(socket, session)
 
     if socket.assigns.current_user do
       {:cont, socket}
@@ -183,6 +184,12 @@ defmodule PentoWeb.UserAuth do
     else
       {:cont, socket}
     end
+  end
+
+  defp mount_session_id(socket, session) do
+    Phoenix.Component.assign_new(socket, :session_id, fn ->
+      session["live_socket_id"]
+    end)
   end
 
   defp mount_current_user(socket, session) do
