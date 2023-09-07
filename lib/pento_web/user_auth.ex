@@ -85,6 +85,19 @@ defmodule PentoWeb.UserAuth do
   end
 
   @doc """
+  Redirects a user to the given path when logged in
+  """
+  def redirect_if_auth(conn, opts) do
+    if conn.request_path == opts[:from] && conn.assigns[:current_user] do
+      conn
+      |> redirect(to: opts[:to])
+      |> halt()
+    else
+      conn
+    end
+  end
+
+  @doc """
   Authenticates the user by looking into the session
   and remember me token.
   """

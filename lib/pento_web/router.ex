@@ -11,6 +11,7 @@ defmodule PentoWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :redirect_if_auth, from: "/", to: "/guess"
   end
 
   pipeline :api do
