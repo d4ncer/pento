@@ -3,7 +3,6 @@ defmodule PentoWeb.ProductLiveTest do
 
   import Phoenix.LiveViewTest
   import Pento.CatalogFixtures
-  import Pento.AccountsFixtures
 
   @create_attrs %{
     description: "some description",
@@ -25,17 +24,17 @@ defmodule PentoWeb.ProductLiveTest do
   end
 
   describe "Index" do
-    setup [:create_product]
+    setup [:create_product, :register_and_log_in_user]
 
     test "lists all products", %{conn: conn, product: product} do
-      {:ok, _index_live, html} = conn |> log_in_user(user_fixture()) |> live(~p"/products")
+      {:ok, _index_live, html} = live(conn, ~p"/products")
 
       assert html =~ "Listing Products"
       assert html =~ product.description
     end
 
     test "saves new product", %{conn: conn} do
-      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/products")
+      {:ok, index_live, _html} = live(conn, ~p"/products")
 
       assert index_live |> element("a", "New Product") |> render_click() =~
                "New Product"
@@ -58,7 +57,7 @@ defmodule PentoWeb.ProductLiveTest do
     end
 
     test "updates product in listing", %{conn: conn, product: product} do
-      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/products")
+      {:ok, index_live, _html} = live(conn, ~p"/products")
 
       assert index_live |> element("#products-#{product.id} a", "Edit") |> render_click() =~
                "Edit Product"
@@ -81,7 +80,7 @@ defmodule PentoWeb.ProductLiveTest do
     end
 
     test "deletes product in listing", %{conn: conn, product: product} do
-      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/products")
+      {:ok, index_live, _html} = live(conn, ~p"/products")
 
       assert index_live |> element("#products-#{product.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#products-#{product.id}")
@@ -89,19 +88,17 @@ defmodule PentoWeb.ProductLiveTest do
   end
 
   describe "Show" do
-    setup [:create_product]
+    setup [:create_product, :register_and_log_in_user]
 
     test "displays product", %{conn: conn, product: product} do
-      {:ok, _show_live, html} =
-        conn |> log_in_user(user_fixture()) |> live(~p"/products/#{product}")
+      {:ok, _show_live, html} = live(conn, ~p"/products/#{product}")
 
       assert html =~ "Show Product"
       assert html =~ product.description
     end
 
     test "updates product within modal", %{conn: conn, product: product} do
-      {:ok, show_live, _html} =
-        conn |> log_in_user(user_fixture()) |> live(~p"/products/#{product}")
+      {:ok, show_live, _html} = live(conn, ~p"/products/#{product}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Product"
