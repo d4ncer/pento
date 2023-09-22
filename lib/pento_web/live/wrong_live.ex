@@ -28,12 +28,26 @@ defmodule PentoWeb.WrongLive do
       <%= @message %> It's <%= @time %>
     </h2>
     <h2>
-      <%= for n <- 1..10 do %>
-        <.link href="#" phx-click="guess" phx-value-number={n}><%= n %></.link>
-      <% end %>
+      <div class="my-4">
+        <%= for n <- 1..10 do %>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            href="#"
+            phx-click="guess"
+            phx-value-number={n}
+          >
+            <%= n %>
+          </button>
+        <% end %>
+      </div>
     </h2>
     <%= if @win_p do %>
-      <button phx-click="reset-state">Reset</button>
+      <button
+        class="bg-transparent mb-4 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        phx-click="reset-state"
+      >
+        Reset
+      </button>
     <% end %>
     <pre>
     <%= @current_user.email %>
