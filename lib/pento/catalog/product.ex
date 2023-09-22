@@ -19,4 +19,13 @@ defmodule Pento.Catalog.Product do
     |> unique_constraint(:sku)
     |> validate_number(:unit_price, greater_than: 0.0)
   end
+
+  @doc false
+  def price_decrease_changeset(product, attrs) do
+    current_unit_price = product.unit_price
+
+    product
+    |> cast(attrs, [:unit_price])
+    |> validate_number(:unit_price, greater_than: 0.0, less_than_or_equal_to: current_unit_price)
+  end
 end

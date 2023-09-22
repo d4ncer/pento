@@ -62,6 +62,15 @@ defmodule Pento.CatalogTest do
       assert product == Catalog.get_product!(product.id)
     end
 
+    test "markdown_product/2 with invalid data returns error changeset" do
+      product = product_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Catalog.markdown_product(product, product.unit_price + 1.0)
+
+      assert product == Catalog.get_product!(product.id)
+    end
+
     test "delete_product/1 deletes the product" do
       product = product_fixture()
       assert {:ok, %Product{}} = Catalog.delete_product(product)

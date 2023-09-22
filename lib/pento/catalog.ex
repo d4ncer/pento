@@ -90,6 +90,24 @@ defmodule Pento.Catalog do
   end
 
   @doc """
+  Updates a product with a marked down unit price.
+
+  ## Examples
+
+      iex> markdown_product(product, 1.0)
+      {:ok, %Product{}}
+
+      iex> update_product(product, -1.0)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def markdown_product(product, markdown_price) do
+    product
+    |> Product.price_decrease_changeset(%{unit_price: product.unit_price - markdown_price})
+    |> Repo.update()
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking product changes.
 
   ## Examples
